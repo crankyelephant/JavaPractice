@@ -5,6 +5,10 @@ package com.ericsson.evedgal.hello;
 
 import java.lang.reflect.Array;
 
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.WebTarget;
+
 /**
  * @author evedgal
  *
@@ -12,6 +16,8 @@ import java.lang.reflect.Array;
 public class Hello {
 	
 	static private String defaultGreeting;
+	
+	static final String BASE_URI = "http://localhost:8080/myapp/";
 	
 	/**
 	 * @param args
@@ -33,7 +39,19 @@ public class Hello {
 		gm.greet();
 		System.out.println();
 		
-		System.out.print("These are some of the holidays: " + gm.getHolidays()[0] + ", " + gm.getHolidays()[Array.getLength(gm.getHolidays())-1]);
+		System.out.print("These are some of the holidays: " + gm.getHolidays()[0] + ", " + gm.getHolidays()[Array.getLength(gm.getHolidays())-1] + "\n");
+		
+//		testing web service...
+//		start the web server beforehand (Main in 'simple-service' project) - the client connects to it
+		
+		Client c = ClientBuilder.newClient();
+		WebTarget target = c.target(BASE_URI);
+		
+		String responseMsg = target.path("myresource").request().get(String.class);
+		System.out.println(responseMsg);
+		
+		responseMsg = target.path("myresource2").request().get(String.class);
+		System.out.println(responseMsg);
 	}
 
 }
